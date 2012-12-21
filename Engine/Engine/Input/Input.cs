@@ -18,11 +18,12 @@ namespace Engine.Input
         {
             Sdl.SDL_InitSubSystem(Sdl.SDL_INIT_JOYSTICK);
 
-            if (Sdl.SDL_NumJoysticks() > 0)
-            {
+            // This is temporarily commented out to allow the game to work with or without an XBox Controller plugged in
+            //if (Sdl.SDL_NumJoysticks() > 0)
+            //{
                 Controller = new XboxController(0);
                 _usingController = true;
-            }
+            //}
         }
 
         public void Update(double elapsedTime)

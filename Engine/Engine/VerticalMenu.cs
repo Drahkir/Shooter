@@ -52,25 +52,31 @@ namespace Engine
 
             float invertY = _input.Controller.LeftControlStick.Y * -1;
 
-            if(invertY < -0.2) {
+            if (invertY < -0.2)
+            {
                 // The control stick is pulled down
-                if(_inDown == false) {
+                if (_inDown == false)
+                {
                     controlPadDown = true;
                     _inDown = true;
                 }
             }
-            else {
+            else
+            {
                 _inDown = false;
             }
 
-            if(invertY > 0.2) {
-                if(_inUp == false) {
+            if (invertY > 0.2)
+            {
+                if (_inUp == false)
+                {
                     controlPadUp = true;
                     _inUp = true;
                 }
             }
 
-            else {
+            else
+            {
                 _inUp = false;
             }
 

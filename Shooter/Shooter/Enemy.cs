@@ -14,14 +14,16 @@ namespace Shooter
         double _scale = 0.3;
         static readonly double HitFlashTime = 0.25;
         double _hitFlashCountDown = 0;
+        EffectsManager _effectsManager;
 
-        public Enemy(TextureManager textureManager)
+        public Enemy(TextureManager textureManager, EffectsManager effectsManager)
         {
             Health = 50;
             _sprite.Texture = textureManager.Get("enemy_ship");
             _sprite.SetScale(_scale, _scale);
             _sprite.SetRotation(Math.PI);
             _sprite.SetPosition(200, 0);
+            _effectsManager = effectsManager;
         }
 
         internal void OnCollision(PlayerCharacter playerCharacter)
@@ -46,7 +48,12 @@ namespace Shooter
         }
 
         private void OnDestroyed() {
-            // Kill the enemy here.
+            _effectsManager.AddExplosion(_sprite.GetPosition());
+        }
+
+        public bool IsDead
+        {
+            get { return Health == 0; }
         }
 
         public void Update(double elapsedTime) {

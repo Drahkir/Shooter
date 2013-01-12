@@ -20,14 +20,16 @@ namespace Shooter
         ScrollingBackground _backgroundLayer;
         List<Enemy> _enemyList = new List<Enemy>();
         BulletManager _bulletManager = new BulletManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
+        EffectsManager _effectsManager;
 
         public Level(Input input, TextureManager textureManager, PersistentGameData gameData)
         {
             _input = input;
             _gameData = gameData;
             _textureManager = textureManager;
+            _effectsManager = new EffectsManager(_textureManager);
             _playerCharacter = new PlayerCharacter(_textureManager, _bulletManager);
-            _enemyList.Add(new Enemy(_textureManager));
+            _enemyList.Add(new Enemy(_textureManager, _effectsManager));
 
             _background = new ScrollingBackground(textureManager.Get("background"));
             _background.SetScale(2, 2);
@@ -65,6 +67,7 @@ namespace Shooter
             UpdateCollisions();
             _enemyList.ForEach(x => x.Update(elapsedTime));
             _bulletManager.Update(elapsedTime);
+            _effectsManager.Update(elapsedTime);
 
             UpdateInput(elapsedTime);
         }
@@ -116,6 +119,8 @@ namespace Shooter
             _enemyList.ForEach(x => x.Render(renderer));
             _playerCharacter.Render(renderer);
             _bulletManager.Render(renderer);
+            _effectsManager.Render(renderer);
+            renderer.Render();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Shooter
         TextureManager _textureManager = new TextureManager();
         Engine.Font _generalFont;
         Engine.Font _titleFont;
+        PersistentGameData _persistentGameData = new PersistentGameData();
         //SoundManager _soundManager = new SoundManager();
 
         public Form1()
@@ -53,8 +54,14 @@ namespace Shooter
 
         private void InitializeGameState()
         {
+            LevelDescription level = new LevelDescription();
+            level.Time = 30; // level only lasts for a second
+            _persistentGameData.CurrentLevel = level;
+
             // Game states are loaded here
             _system.AddState("start_menu", new StartMenuState(_titleFont, _generalFont, _input, _system));
+            _system.AddState("inner_game", new InnerGameState(_system, _input, _textureManager, _persistentGameData, _generalFont));
+            _system.AddState("game_over", new GameOverState(_persistentGameData, _system, _input, _generalFont, _titleFont));
             _system.ChangeState("start_menu");
         }
 
@@ -69,6 +76,10 @@ namespace Shooter
             // Textures are loaded here.
             _textureManager.LoadTexture("title_font", "title_font.tga");
             _textureManager.LoadTexture("general_font", "general_font.tga");
+            _textureManager.LoadTexture("player_spaceship", "spaceship.tga");
+            _textureManager.LoadTexture("background", "background.tga");
+            _textureManager.LoadTexture("background_layer_1", "background_p.tga");
+            _textureManager.LoadTexture("enemy_ship", "spaceship2.tga");
         }
 
         private void UpdateInput(double elapsedTime)
@@ -115,6 +126,5 @@ namespace Shooter
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Gl.glLoadIdentity();
         }
-
     }
 }

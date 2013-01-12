@@ -52,6 +52,7 @@ namespace Shooter
                     enemy.OnCollision(_playerCharacter);
                     _playerCharacter.OnCollision(enemy);
                 }
+                _bulletManager.UpdateEnemyCollisions(enemy);
             }
         }
         public void Update(double elapsedTime)

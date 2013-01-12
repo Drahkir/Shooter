@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Batch.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="CharacterData.cs" />

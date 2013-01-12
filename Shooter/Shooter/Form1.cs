@@ -80,6 +80,7 @@ namespace Shooter
             _textureManager.LoadTexture("background", "background.tga");
             _textureManager.LoadTexture("background_layer_1", "background_p.tga");
             _textureManager.LoadTexture("enemy_ship", "spaceship2.tga");
+            _textureManager.LoadTexture("bullet", "bullet.tga");
         }
 
         private void UpdateInput(double elapsedTime)

@@ -23,7 +23,7 @@ namespace Shooter
             _system = system;
             _generalFont = generalFont;
             InitializeMenu();
-            _title = new Text("Another Castle", titleFont);
+            _title = new Text("Shooter", titleFont);
             _title.SetColor(new Color(0, 0, 0, 1));
 
             //Center on the x and place somewhere near the top

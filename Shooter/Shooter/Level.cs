@@ -19,13 +19,14 @@ namespace Shooter
         ScrollingBackground _background;
         ScrollingBackground _backgroundLayer;
         List<Enemy> _enemyList = new List<Enemy>();
+        BulletManager _bulletManager = new BulletManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
 
         public Level(Input input, TextureManager textureManager, PersistentGameData gameData)
         {
             _input = input;
             _gameData = gameData;
             _textureManager = textureManager;
-            _playerCharacter = new PlayerCharacter(_textureManager);
+            _playerCharacter = new PlayerCharacter(_textureManager, _bulletManager);
             _enemyList.Add(new Enemy(_textureManager));
 
             _background = new ScrollingBackground(textureManager.Get("background"));
@@ -55,7 +56,24 @@ namespace Shooter
         }
         public void Update(double elapsedTime)
         {
+            _playerCharacter.Update(elapsedTime);
+
+            _background.Update((float)elapsedTime);
+            _backgroundLayer.Update((float)elapsedTime);
+
             UpdateCollisions();
+            _enemyList.ForEach(x => x.Update(elapsedTime));
+            _bulletManager.Update(elapsedTime);
+
+            UpdateInput(elapsedTime);
+        }
+
+        private void UpdateInput(double elapsedTime) {
+
+            if(_input.Keyboard.IsKeyPressed(Keys.Space) || _input.Controller.ButtonA.Pressed) {
+                _playerCharacter.Fire();
+            }            
+            
             // Get controls and apply to player character
             double _x = _input.Controller.LeftControlStick.X;
             double _y = _input.Controller.LeftControlStick.Y * -1;
@@ -63,10 +81,6 @@ namespace Shooter
 
             if (Math.Abs(controlInput.Length()) < 0.0001)
             {
-                _background.Update((float)elapsedTime);
-                _backgroundLayer.Update((float)elapsedTime);
-                _enemyList.ForEach(x => x.Update(elapsedTime));
-
                 // If the input is very small, then the player may not be using
                 // a controller; he might be using the keyboard.
                 if (_input.Keyboard.IsKeyHeld(Keys.Left))
@@ -88,18 +102,19 @@ namespace Shooter
                 {
                     controlInput.Y = -1;
                 }
+
+                _playerCharacter.Move(controlInput * elapsedTime);
             }
-
-            _playerCharacter.Move(controlInput * elapsedTime);
-
         }
 
         public void Render(Renderer renderer)
         {
             _background.Render(renderer);
             _backgroundLayer.Render(renderer);
+
             _enemyList.ForEach(x => x.Render(renderer));
             _playerCharacter.Render(renderer);
+            _bulletManager.Render(renderer);
         }
     }
 }

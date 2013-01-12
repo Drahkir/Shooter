@@ -25,10 +25,10 @@ namespace Shooter
         public void Render(Renderer renderer)
         {
             renderer.DrawSprite(_sprite);
-            Render_Debug();
+            //Render_Debug();
         }
 
-        internal void OnCollision(PlayerCharacter player)
+        internal void OnCollision(Entity entity)
         {
             // Handle Collision with player.
         }

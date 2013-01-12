@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enemy.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

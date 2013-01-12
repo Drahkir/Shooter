@@ -37,8 +37,25 @@ namespace Shooter
             _backgroundLayer.SetScale(2.0, 2.0);
         }
 
+        public bool HasPlayerDied()
+        {
+            return _playerCharacter.IsDead;
+        }
+
+        private void UpdateCollisions()
+        {
+            foreach (Enemy enemy in _enemyList)
+            {
+                if (enemy.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox()))
+                {
+                    enemy.OnCollision(_playerCharacter);
+                    _playerCharacter.OnCollision(enemy);
+                }
+            }
+        }
         public void Update(double elapsedTime)
         {
+            UpdateCollisions();
             // Get controls and apply to player character
             double _x = _input.Controller.LeftControlStick.X;
             double _y = _input.Controller.LeftControlStick.Y * -1;

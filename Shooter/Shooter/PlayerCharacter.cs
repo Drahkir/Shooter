@@ -6,26 +6,40 @@ using Engine;
 
 namespace Shooter
 {
-    public class PlayerCharacter
+    public class PlayerCharacter : Entity
     {
-        Sprite _spaceship = new Sprite();
         double _speed = 512; // pixels per second
         double _scale = 0.5;
+        bool _dead = false;
 
         public PlayerCharacter(TextureManager textureManager)
         {
-            _spaceship.Texture = textureManager.Get("player_spaceship");
-            _spaceship.SetScale(_scale, _scale); 
+            _sprite.Texture = textureManager.Get("player_spaceship");
+            _sprite.SetScale(_scale, _scale); 
         }
 
         public void Render(Renderer renderer) {
-            renderer.DrawSprite(_spaceship);
+            renderer.DrawSprite(_sprite);
+            Render_Debug();
+        }
+
+        public bool IsDead
+        {
+            get
+            {
+                return _dead;
+            }
+        }
+
+        internal void OnCollision(Enemy enemy)
+        {
+            _dead = true;
         }
 
         public void Move(Vector amount)
         {
             amount *= _speed;
-            _spaceship.SetPosition(_spaceship.GetPosition() + amount);
+            _sprite.SetPosition(_sprite.GetPosition() + amount);
         }
     }
 }

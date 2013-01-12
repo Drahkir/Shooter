@@ -49,6 +49,13 @@ namespace Shooter
                 _gameData.JustWon = true;
                 _system.ChangeState("game_over");
             }
+
+            if (_level.HasPlayerDied())
+            {
+                OnGameStart();
+                _gameData.JustWon = false;
+                _system.ChangeState("game_over");
+            }
         }
 
         public void Render()

@@ -76,7 +76,7 @@ namespace Shooter
             // Textures are loaded here.
             _textureManager.LoadTexture("title_font", "title_font.tga");
             _textureManager.LoadTexture("general_font", "general_font.tga");
-            _textureManager.LoadTexture("player_spaceship", "spaceship.tga");
+            _textureManager.LoadTexture("player_spaceship", "spaceship.png");
             _textureManager.LoadTexture("background", "background.tga");
             _textureManager.LoadTexture("background_layer_1", "background_p.tga");
             _textureManager.LoadTexture("enemy_ship", "spaceship2.tga");

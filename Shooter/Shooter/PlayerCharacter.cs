@@ -14,7 +14,7 @@ namespace Shooter
         static readonly double FireRecovery = 0.25;
         double _fireRecoveryTime = FireRecovery;
         double _speed = 512; // pixels per second
-        double _scale = 0.5;
+        double _scale = 1;
         bool _dead = false;
 
         public PlayerCharacter(TextureManager textureManager, BulletManager bulletManager)
@@ -22,7 +22,8 @@ namespace Shooter
             _bulletManager = bulletManager;
             _bulletTexture = textureManager.Get("bullet");
             _sprite.Texture = textureManager.Get("player_spaceship");
-            _sprite.SetScale(_scale, _scale); 
+            _sprite.SetScale(_scale, _scale);
+            //_sprite.SetRotation(Math.PI / 2);
         }
 
         public void Render(Renderer renderer) {
@@ -56,7 +57,12 @@ namespace Shooter
             }
         }
 
-        internal void OnCollision(Entity entity)
+        internal void OnCollision(Enemy enemy)
+        {
+            _dead = true;
+        }
+
+        internal void OnCollision(Bullet bullet)
         {
             _dead = true;
         }

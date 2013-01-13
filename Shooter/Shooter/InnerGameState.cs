@@ -40,7 +40,7 @@ namespace Shooter
 
         public void Update(double elapsedTime)
         {
-            _level.Update(elapsedTime);
+            _level.Update(elapsedTime, _gameTime);
             _gameTime -= elapsedTime;
 
             if (_gameTime <= 0)

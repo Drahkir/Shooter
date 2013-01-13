@@ -18,7 +18,8 @@ namespace Shooter
         TextureManager _textureManager;
         ScrollingBackground _background;
         ScrollingBackground _backgroundLayer;
-        List<Enemy> _enemyList = new List<Enemy>();
+        //List<Enemy> _enemyList = new List<Enemy>();
+        EnemyManager _enemyManager;
         BulletManager _bulletManager = new BulletManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         EffectsManager _effectsManager;
 
@@ -29,7 +30,8 @@ namespace Shooter
             _textureManager = textureManager;
             _effectsManager = new EffectsManager(_textureManager);
             _playerCharacter = new PlayerCharacter(_textureManager, _bulletManager);
-            _enemyList.Add(new Enemy(_textureManager, _effectsManager));
+            _enemyManager = new EnemyManager(_textureManager, _effectsManager, _bulletManager, -1300);
+            //_enemyList.Add(new Enemy(_textureManager, _effectsManager));
 
             _background = new ScrollingBackground(textureManager.Get("background"));
             _background.SetScale(2, 2);
@@ -47,7 +49,9 @@ namespace Shooter
 
         private void UpdateCollisions()
         {
-            foreach (Enemy enemy in _enemyList)
+            _bulletManager.UpdatePlayerCollision(_playerCharacter);
+
+            foreach (Enemy enemy in _enemyManager.EnemyList)
             {
                 if (enemy.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox()))
                 {
@@ -57,7 +61,7 @@ namespace Shooter
                 _bulletManager.UpdateEnemyCollisions(enemy);
             }
         }
-        public void Update(double elapsedTime)
+        public void Update(double elapsedTime, double gameTime)
         {
             _playerCharacter.Update(elapsedTime);
 
@@ -65,7 +69,7 @@ namespace Shooter
             _backgroundLayer.Update((float)elapsedTime);
 
             UpdateCollisions();
-            _enemyList.ForEach(x => x.Update(elapsedTime));
+            _enemyManager.Update(elapsedTime, gameTime);
             _bulletManager.Update(elapsedTime);
             _effectsManager.Update(elapsedTime);
 
@@ -74,7 +78,7 @@ namespace Shooter
 
         private void UpdateInput(double elapsedTime) {
 
-            if(_input.Keyboard.IsKeyPressed(Keys.Space) || _input.Controller.ButtonA.Pressed) {
+            if(_input.Keyboard.IsKeyHeld(Keys.Space) || _input.Keyboard.IsKeyPressed(Keys.Space) || _input.Controller.ButtonA.Pressed) {
                 _playerCharacter.Fire();
             }            
             
@@ -116,7 +120,7 @@ namespace Shooter
             _background.Render(renderer);
             _backgroundLayer.Render(renderer);
 
-            _enemyList.ForEach(x => x.Render(renderer));
+            _enemyManager.Render(renderer);
             _playerCharacter.Render(renderer);
             _bulletManager.Render(renderer);
             _effectsManager.Render(renderer);

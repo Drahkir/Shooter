@@ -15,8 +15,20 @@ namespace Shooter
         static readonly double HitFlashTime = 0.25;
         double _hitFlashCountDown = 0;
         EffectsManager _effectsManager;
+        public Path Path { get; set; }
+        public double MaxTimeToShoot { get; set; }
+        public double MinTimeToShoot { get; set; }
+        Random _random = new Random();
+        double _shootCountDown;
+        BulletManager _bulletManager;
+        Texture _bulletTexture;
 
-        public Enemy(TextureManager textureManager, EffectsManager effectsManager)
+        public void RestartShootCountDown()
+        {
+            _shootCountDown = MinTimeToShoot + (_random.NextDouble() * MaxTimeToShoot);
+        }
+
+        public Enemy(TextureManager textureManager, EffectsManager effectsManager, BulletManager bulletManager)
         {
             Health = 50;
             _sprite.Texture = textureManager.Get("enemy_ship");
@@ -24,6 +36,11 @@ namespace Shooter
             _sprite.SetRotation(Math.PI);
             _sprite.SetPosition(200, 0);
             _effectsManager = effectsManager;
+            _bulletManager = bulletManager;
+            _bulletTexture = textureManager.Get("bullet");
+            MaxTimeToShoot = 12;
+            MinTimeToShoot = 1;
+            RestartShootCountDown();
         }
 
         internal void OnCollision(PlayerCharacter playerCharacter)
@@ -56,7 +73,29 @@ namespace Shooter
             get { return Health == 0; }
         }
 
+        internal void SetPosition(Vector position)
+        {
+            _sprite.SetPosition(position);
+        }
+
         public void Update(double elapsedTime) {
+            _shootCountDown = _shootCountDown - elapsedTime;
+
+            if (_shootCountDown <= 0)
+            {
+                Bullet bullet = new Bullet(_bulletTexture);
+                bullet.Speed = 350;
+                bullet.Direction = new Vector(-1, 0, 0);
+                bullet.SetPosition(_sprite.GetPosition());
+                bullet.SetColor(new Engine.Color(1, 0, 0, 1));
+                _bulletManager.EnemyShoot(bullet);
+                RestartShootCountDown();
+            }
+
+            if (Path != null)
+            {
+                Path.UpdatePosition(elapsedTime, this);
+            }
             if(_hitFlashCountDown != 0) {
                 _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
                 double scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);

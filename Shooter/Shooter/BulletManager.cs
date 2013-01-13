@@ -41,7 +41,6 @@ namespace Shooter
             }
         }
 
-
         public void Update(double elapsedTime)
         {
             UpdateBulletList(_bullets, elapsedTime);
@@ -85,7 +84,6 @@ namespace Shooter
             _bullets.ForEach(x => x.Render(renderer));
             _enemyBullets.ForEach(x => x.Render(renderer));
         }
-
 
         internal void UpdateEnemyCollisions(Enemy enemy)
         {

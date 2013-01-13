@@ -62,6 +62,7 @@
     <Compile Include="BulletManager.cs" />
     <Compile Include="EffectsManager.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="EnemyDef.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Form1.cs">
@@ -74,6 +75,7 @@
     <Compile Include="InnerGameState.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LevelDescription.cs" />
+    <Compile Include="Path.cs" />
     <Compile Include="PersistentGameData.cs" />
     <Compile Include="PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
@@ -140,9 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="spaceship.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="spaceship2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

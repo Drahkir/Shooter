@@ -55,7 +55,6 @@ namespace Shooter
         private void InitializeGameState()
         {
             LevelDescription level = new LevelDescription();
-            level.Time = 30; // level only lasts for a second
             _persistentGameData.CurrentLevel = level;
 
             // Game states are loaded here

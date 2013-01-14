@@ -64,6 +64,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyDef.cs" />
     <Compile Include="EnemyManager.cs" />
+    <Compile Include="EnemyType.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

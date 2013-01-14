@@ -68,8 +68,15 @@ namespace Shooter
             _upComingEnemies.Sort(delegate(EnemyDef firstEnemy, EnemyDef secondEnemy)
             {
                 return firstEnemy.LaunchTime.CompareTo(secondEnemy.LaunchTime);
-
             });
+        }
+
+        private void QueueUpcomingEnemies()
+        {
+            var prng = new Random();
+            var typesList = Enum.GetNames(typeof(EnemyType));
+            int numTypes = typesList.Length;
+            int randomValue = prng.Next(0, numTypes);
         }
 
         private void UpdateEnemySpawns(double gameTime)
@@ -87,6 +94,22 @@ namespace Shooter
                 _enemies.Add(CreateEnemyFromDef(lastElement));
             }
         }
+
+        //private void UpdateEnemySpawns(double gameTime)
+        //{
+        //    // If no upcoming enemies then there's nothing to spawn
+        //    if (_upComingEnemies.Count == 0)
+        //    {
+        //        return;
+        //    }
+
+        //    EnemyDef lastElement = _upComingEnemies[_upComingEnemies.Count - 1];
+        //    if (gameTime < lastElement.LaunchTime)
+        //    {
+        //        _upComingEnemies.RemoveAt(_upComingEnemies.Count - 1);
+        //        _enemies.Add(CreateEnemyFromDef(lastElement));
+        //    }
+        //}
 
         private Enemy CreateEnemyFromDef(EnemyDef definition)
         {

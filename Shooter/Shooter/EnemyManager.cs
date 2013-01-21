@@ -30,37 +30,37 @@ namespace Shooter
             _bulletManager = bulletManager;
             _leftBound = leftBound;
 
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 30));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 29.5));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 29));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 28.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 30));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 29.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 29));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 28.5));
 
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 30));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29.5));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 28.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 30));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 28.5));
 
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 25));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 24.5));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 24));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder", 23.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 25));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 24.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 24));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 23.5));
 
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 20));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19.5));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 18.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 20));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19.5));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 18.5));
 
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 16));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.8));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.6));
-            _upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.4));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 16));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.8));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.6));
+            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.4));
 
 
-            _upComingEnemies.Add(new EnemyDef("up_l", 10));
-            _upComingEnemies.Add(new EnemyDef("down_l", 9));
-            _upComingEnemies.Add(new EnemyDef("up_l", 8));
-            _upComingEnemies.Add(new EnemyDef("down_l", 7));
-            _upComingEnemies.Add(new EnemyDef("up_l", 6));
+            //_upComingEnemies.Add(new EnemyDef("up_l", 10));
+            //_upComingEnemies.Add(new EnemyDef("down_l", 9));
+            //_upComingEnemies.Add(new EnemyDef("up_l", 8));
+            //_upComingEnemies.Add(new EnemyDef("down_l", 7));
+            //_upComingEnemies.Add(new EnemyDef("up_l", 6));
 
 
 
@@ -71,12 +71,20 @@ namespace Shooter
             });
         }
 
-        private void QueueUpcomingEnemies()
+        private void QueueUpcomingEnemies(double gameTime)
         {
             var prng = new Random();
             var typesList = Enum.GetNames(typeof(EnemyType));
             int numTypes = typesList.Length;
-            int randomValue = prng.Next(0, numTypes);
+            var randomEnemy = typesList[prng.Next(0, numTypes)];
+            var randomCount = prng.Next(4, 10);
+            var launchTime = gameTime + 2;
+
+            for (int i = 0; i < randomCount; i++)
+            {
+                _upComingEnemies.Add(new EnemyDef(randomEnemy, launchTime));
+                launchTime += .5;
+            }
         }
 
         private void UpdateEnemySpawns(double gameTime)
@@ -84,7 +92,7 @@ namespace Shooter
             // If no upcoming enemies then there's nothing to spawn
             if (_upComingEnemies.Count == 0)
             {
-                return;
+                QueueUpcomingEnemies(gameTime);
             }
 
             EnemyDef lastElement = _upComingEnemies[_upComingEnemies.Count - 1];
@@ -116,6 +124,16 @@ namespace Shooter
             Enemy enemy = new Enemy(_textureManager, _effectsManager, _bulletManager);
 
             if (definition.EnemyType == "cannon_fodder")
+            {
+                List<Vector> _pathPoints = new List<Vector>();
+                _pathPoints.Add(new Vector(1400, 0, 0));
+                _pathPoints.Add(new Vector(0, 0, 0));
+                _pathPoints.Add(new Vector(-1400, 0, 0));
+
+                enemy.Path = new Path(_pathPoints, 10);
+            }
+
+            if (definition.EnemyType == "cannon_fodder_high")
             {
                 List<Vector> _pathPoints = new List<Vector>();
                 _pathPoints.Add(new Vector(1400, 0, 0));
@@ -154,7 +172,7 @@ namespace Shooter
 
                 enemy.Path = new Path(_pathPoints, 10);
             }
-                
+
             else if (definition.EnemyType == "down_l")
             {
                 List<Vector> _pathPoints = new List<Vector>();
@@ -166,10 +184,10 @@ namespace Shooter
                 enemy.Path = new Path(_pathPoints, 10);
             }
 
-            else
-            {
-                System.Diagnostics.Debug.Assert(false, "Unknown enemy type.");
-            }
+            //else
+            //{
+            //    System.Diagnostics.Debug.Assert(false, "Unknown enemy type.");
+            //}
             return enemy;
         }
 
